@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Name="Page"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="qualityControl.MOBILE.Pages.WorkOrderPage"
+             xmlns:dtos="clr-namespace:qualityControl.SHARED.Dtos;assembly=qualityControl.SHARED"
+             xmlns:viewmodels="clr-namespace:qualityControl.MOBILE.ViewModels"
+             x:DataType="viewmodels:WorkOrderViewModel"
+             Title="">
+
+    <Grid RowSpacing="12" >
+        <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="1"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="1"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="1"/>
+         <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <SearchBar Grid.Row="0"
+                   Margin="24, 0, 24, 0"
+                   Placeholder="Search"
+                   FontFamily="Uregu"
+                   Text="{Binding Query}"
+                   SearchCommand="{Binding SearchCommand}"
+                   CancelButtonColor="{DynamicResource Primary}"
+                   />
+
+        <BoxView Grid.Row="1"
+                 Margin="24, 0, 24, 0"
+                 HeightRequest="1"
+                 BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+        <HorizontalStackLayout Grid.Row="2" Margin="24, 0, 24, 0" HorizontalOptions="Center">
+            <Button Text="Search" Command="{Binding SearchCommand}" CornerRadius="4" WidthRequest="120" FontFamily="Uregu"/>
+        </HorizontalStackLayout>
+        
+        <BoxView Grid.Row="3"
+                 Margin="24, 0, 24, 0"
+                 HeightRequest="1"
+                 BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+        <HorizontalStackLayout Grid.Row="4" Margin="24, 0, 24, 0" HorizontalOptions="Center" Spacing="16">
+            <VerticalStackLayout Spacing="2" HorizontalOptions="End" VerticalOptions="Center">
+                <Label Text="Show Finished Orders" FontSize="12" HorizontalTextAlignment="Center"/>
+                <Switch IsToggled="{Binding OnlyFinished}"  HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="2" HorizontalOptions="End" VerticalOptions="Center">
+                <Label Text="Show Not Finished Orders" FontSize="12" HorizontalTextAlignment="Center"/>
+                <Switch IsToggled="{Binding OnlyNotFinished}" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+
+        <BoxView Grid.Row="5"
+                 Margin="24, 0, 24, 0"
+                 HeightRequest="1"
+                 BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+        <ActivityIndicator Grid.Row="6" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+
+        <CollectionView Grid.Row="7" ItemsSource="{Binding WorkOrders}" HorizontalOptions="Start">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dtos:WorkOrderDto">
+                    <Frame CornerRadius="0" Margin="0,6,0,0">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Command="{Binding BindingContext.OpenWorkOrderDetailCommand, Source={x:Reference Page}}"
+                            CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="4">
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="LINE NO: " TextColor="{StaticResource MidnightBlue}" FontAttributes="Bold" FontSize="16"/>
+                                        <Span Text="{Binding LineNo}" FontAttributes="Italic" FontSize="16"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="OPERATION BEGIN DATE: " TextColor="DarkRed" FontAttributes="Bold" FontSize="12"/>
+                                        <Span Text="{Binding OpBegDate}" FontAttributes="Italic"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="ITEM NAME: " TextColor="DarkGreen" FontAttributes="Bold" FontSize="12"/>
+                                        <Span Text="{Binding ItemName}" FontSize="12"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

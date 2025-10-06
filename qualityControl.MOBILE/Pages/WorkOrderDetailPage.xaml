@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Name="DetaPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:qualityControl.MOBILE.ViewModels"
+             x:Class="qualityControl.MOBILE.Pages.WorkOrderDetailPage"
+             x:DataType="viewmodels:DetailViewModel"
+             Title="">
+    
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto,*">
+            <Label Text="WORK ORDER DETAIL"
+                   FontFamily="Uregu"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalTextAlignment="Center"/>
+        </Grid>
+    </Shell.TitleView>
+    
+    <ScrollView Padding="0, 48, 0, 0">
+        <VerticalStackLayout Spacing="8" Margin="24, 0, 24, 0">
+            <VerticalStackLayout WidthRequest="360" HorizontalOptions="Start">
+                <Label Text="LINE NO " TextColor="{StaticResource MidnightBlue}" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding workOrderDto.LineNo}" FontSize="16" FontAttributes="Italic"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     HorizontalOptions="Start"
+                     WidthRequest="360"
+                     BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+            <VerticalStackLayout WidthRequest="360" HorizontalOptions="Start">
+                <Label Text="OPERATION BEGIN DATE " TextColor="DarkRed" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding workOrderDto.OpBegDate}" FontSize="16" FontAttributes="Italic"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     HorizontalOptions="Start"
+                     WidthRequest="360"
+                     BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+            <VerticalStackLayout HorizontalOptions="Start">
+                <Label Text="ITEM NAME " TextColor="DarkGreen" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding workOrderDto.ItemName}" FontSize="16"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     HorizontalOptions="Start"
+                     WidthRequest="360"
+                     BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+            <VerticalStackLayout HorizontalOptions="Start">
+                <Label Text="ITEM CODE " TextColor="DarkOrange" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding workOrderDto.ItemCode}" FontSize="16"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     HorizontalOptions="Start"
+                     WidthRequest="360"
+                     BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+            <VerticalStackLayout HorizontalOptions="Start">
+                <Label Text="PROGRESS " TextColor="Purple" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding workOrderDto.ActPlnPercentageDisplay}" FontSize="16"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     HorizontalOptions="Start"
+                     WidthRequest="360"
+                     BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
+
+            <Button FontFamily="Uregu" 
+                    FontSize="16" 
+                    Margin="24" 
+                    BackgroundColor="DarkGreen" 
+                    Text="Add Quality Control Results" CornerRadius="4"
+                    Command="{Binding BindingContext.OpenAddQualityControlCommand, Source={x:Reference DetaPage}}"
+                    CommandParameter="{Binding workOrderDto}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

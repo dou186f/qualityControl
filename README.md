@@ -17,7 +17,7 @@ After verification, both product information and test results are saved to anoth
 - 🔄 **Dual Database Sync** — Saves product and test data to a secondary server for reporting and traceability
 
 - 📱 **Mobile Interface (MAUI)** — User-friendly app designed for on-site quality personnel
-- 
+
 - 🌐 **API (ASP.NET Core)** — Handles data exchange between production and quality databases
 
 - 💾 **Secure Data Management** — Reliable SQL Server integration

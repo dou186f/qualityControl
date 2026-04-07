@@ -17,6 +17,8 @@ A mobile and web-based quality control application developed for a transformer m
 |---|---|
 | Mobile Frontend | .NET MAUI |
 | Backend | ASP.NET Core Web API |
+| Shared Layer | Class library (common models & DTOs) |
+| Data Access | Microsoft.Data.SqlClient (raw SQL) |
 | Database | Microsoft SQL Server (×2) |
 | Architecture | MVVM + Repository Pattern |
 | Language | C# |
@@ -44,7 +46,7 @@ A mobile and web-based quality control application developed for a transformer m
 ## Getting Started
 
 ```bash
-git clone https://github.com/yourusername/qualityControlProject.git
+git clone https://github.com/dou186f/qualityControl.git
 ```
 
 1. Open the solution in Visual Studio 2022.

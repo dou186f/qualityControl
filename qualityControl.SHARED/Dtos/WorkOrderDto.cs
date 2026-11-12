@@ -16,9 +16,9 @@
         {
             get
             {
-                if (ProductionPlnamount == 0)
+                if (ProductionPlnamount is null or <= 0 || ProductionActamount is null)
                 {
-                    return $"{ProductionActamount}/0 (N/A)";
+                    return $"{ProductionActamount?.ToString() ?? "N/A"}/{ProductionPlnamount?.ToString() ?? "N/A"} (N/A)";
                 }
                 double? percentage = (double?) ProductionActamount / ProductionPlnamount * 100;
                 string percentText = $"{percentage:F1}%";

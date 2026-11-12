@@ -29,6 +29,7 @@ namespace qualityControl.MOBILE.ViewModels
             {
                 if (_onlyfinished == value) return;
                 _onlyfinished = value;
+                if (value) OnlyNotFinished = false;
                 OnPropertyChanged();
             }
         }
@@ -41,6 +42,7 @@ namespace qualityControl.MOBILE.ViewModels
             {
                 if (_onlynotfinished == value) return;
                 _onlynotfinished = value;
+                if (value) OnlyFinished = false;
                 OnPropertyChanged();
             }
         }

@@ -23,7 +23,7 @@
         <SearchBar Grid.Row="0"
                    Margin="24, 0, 24, 0"
                    Placeholder="Search"
-                   FontFamily="Uregu"
+                   FontFamily="OpenSansRegular"
                    Text="{Binding Query}"
                    SearchCommand="{Binding SearchCommand}"
                    CancelButtonColor="{DynamicResource Primary}"
@@ -35,7 +35,7 @@
                  BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
 
         <HorizontalStackLayout Grid.Row="2" Margin="24, 0, 24, 0" HorizontalOptions="Center">
-            <Button Text="Search" Command="{Binding SearchCommand}" CornerRadius="4" WidthRequest="120" FontFamily="Uregu"/>
+            <Button Text="Search" Command="{Binding SearchCommand}" CornerRadius="4" WidthRequest="120" FontFamily="OpenSansRegular"/>
         </HorizontalStackLayout>
         
         <BoxView Grid.Row="3"

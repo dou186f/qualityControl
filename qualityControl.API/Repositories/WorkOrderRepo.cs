@@ -40,14 +40,14 @@ namespace qualityControl.API.Repositories
                 list.Add(new WorkOrderDto
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LogicalRef")),
-                    LineNo = reader.GetString(reader.GetOrdinal("LINENO_")),
-                    OpBegDate = reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
+                    LineNo = reader.IsDBNull(reader.GetOrdinal("LINENO_")) ? null : reader.GetString(reader.GetOrdinal("LINENO_")),
+                    OpBegDate = reader.IsDBNull(reader.GetOrdinal("OpBegDate")) ? null : reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
                     ProdordRef = reader.GetInt32(reader.GetOrdinal("Prodordref")),
                     ItemRef = reader.GetInt32(reader.GetOrdinal("Itemref")),
-                    ItemName = reader.GetString(reader.GetOrdinal("ItemName")),
-                    ItemCode = reader.GetString(reader.GetOrdinal("ItemCode")),
-                    ProductionActamount = reader.GetDouble(reader.GetOrdinal("ProductionActamount")),
-                    ProductionPlnamount = reader.GetDouble(reader.GetOrdinal("ProductionPlnamount"))
+                    ItemName = reader.IsDBNull(reader.GetOrdinal("ItemName")) ? null : reader.GetString(reader.GetOrdinal("ItemName")),
+                    ItemCode = reader.IsDBNull(reader.GetOrdinal("ItemCode")) ? null : reader.GetString(reader.GetOrdinal("ItemCode")),
+                    ProductionActamount = reader.IsDBNull(reader.GetOrdinal("ProductionActamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionActamount"))),
+                    ProductionPlnamount = reader.IsDBNull(reader.GetOrdinal("ProductionPlnamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionPlnamount")))
                 });
             }
             return list;
@@ -82,14 +82,14 @@ namespace qualityControl.API.Repositories
                 return new WorkOrderDto
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LogicalRef")),
-                    LineNo = reader.GetString(reader.GetOrdinal("LINENO_")),
-                    OpBegDate = reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
+                    LineNo = reader.IsDBNull(reader.GetOrdinal("LINENO_")) ? null : reader.GetString(reader.GetOrdinal("LINENO_")),
+                    OpBegDate = reader.IsDBNull(reader.GetOrdinal("OpBegDate")) ? null : reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
                     ProdordRef = reader.GetInt32(reader.GetOrdinal("Prodordref")),
                     ItemRef = reader.GetInt32(reader.GetOrdinal("Itemref")),
-                    ItemName = reader.GetString(reader.GetOrdinal("ItemName")),
-                    ItemCode = reader.GetString(reader.GetOrdinal("ItemCode")),
-                    ProductionActamount = reader.GetDouble(reader.GetOrdinal("ProductionActamount")),
-                    ProductionPlnamount = reader.GetDouble(reader.GetOrdinal("ProductionPlnamount"))
+                    ItemName = reader.IsDBNull(reader.GetOrdinal("ItemName")) ? null : reader.GetString(reader.GetOrdinal("ItemName")),
+                    ItemCode = reader.IsDBNull(reader.GetOrdinal("ItemCode")) ? null : reader.GetString(reader.GetOrdinal("ItemCode")),
+                    ProductionActamount = reader.IsDBNull(reader.GetOrdinal("ProductionActamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionActamount"))),
+                    ProductionPlnamount = reader.IsDBNull(reader.GetOrdinal("ProductionPlnamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionPlnamount")))
                 };
             }
             return null;
@@ -126,12 +126,9 @@ namespace qualityControl.API.Repositories
                                                   OR i.[CODE] COLLATE Latin1_General_CI_AI LIKE '%' + @q + '%'
                                                   OR w.[LINENO_] LIKE '%' + @q + '%')
                                                   OR (@qDate IS NOT NULL AND CAST(w.[OPBEGDATE] AS date) = CAST(@qDate AS date)))
-                                                  AND (@onlyFinished = 0 OR (p.[ACTAMOUNT] IS NOT NULL
-                                                                         AND p.[PLNAMOUNT] IS NOT NULL
-                                                                         AND ABS(p.[ACTAMOUNT] - p.[PLNAMOUNT]) < 0.00001))
-                                                  AND (@onlyNotFinished = 0 OR (p.[ACTAMOUNT] IS NOT NULL
-                                                                            AND p.[PLNAMOUNT] IS NOT NULL
-                                                                            AND ABS(p.[ACTAMOUNT] - p.[PLNAMOUNT]) > 0.00001))
+                                                  AND (@onlyFinished = 0 OR (p.[PLNAMOUNT] > 0 AND p.[ACTAMOUNT] >= p.[PLNAMOUNT]))
+                                                  AND (@onlyNotFinished = 0 OR (p.[PLNAMOUNT] IS NULL OR p.[PLNAMOUNT] <= 0
+                                                                            OR p.[ACTAMOUNT] IS NULL OR p.[ACTAMOUNT] < p.[PLNAMOUNT]))
                                                   ORDER BY w.[OPBEGDATE] DESC;";
 
             var pQ = command.CreateParameter();
@@ -164,14 +161,14 @@ namespace qualityControl.API.Repositories
                 wantedWorkOrders.Add(new WorkOrderDto
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LogicalRef")),
-                    LineNo = reader.GetString(reader.GetOrdinal("LINENO_")),
-                    OpBegDate = reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
+                    LineNo = reader.IsDBNull(reader.GetOrdinal("LINENO_")) ? null : reader.GetString(reader.GetOrdinal("LINENO_")),
+                    OpBegDate = reader.IsDBNull(reader.GetOrdinal("OpBegDate")) ? null : reader.GetDateTime(reader.GetOrdinal("OpBegDate")),
                     ProdordRef = reader.GetInt32(reader.GetOrdinal("Prodordref")),
                     ItemRef = reader.GetInt32(reader.GetOrdinal("Itemref")),
-                    ItemName = reader.GetString(reader.GetOrdinal("ItemName")),
-                    ItemCode = reader.GetString(reader.GetOrdinal("ItemCode")),
-                    ProductionActamount = reader.GetDouble(reader.GetOrdinal("ProductionActamount")),
-                    ProductionPlnamount = reader.GetDouble(reader.GetOrdinal("ProductionPlnamount"))
+                    ItemName = reader.IsDBNull(reader.GetOrdinal("ItemName")) ? null : reader.GetString(reader.GetOrdinal("ItemName")),
+                    ItemCode = reader.IsDBNull(reader.GetOrdinal("ItemCode")) ? null : reader.GetString(reader.GetOrdinal("ItemCode")),
+                    ProductionActamount = reader.IsDBNull(reader.GetOrdinal("ProductionActamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionActamount"))),
+                    ProductionPlnamount = reader.IsDBNull(reader.GetOrdinal("ProductionPlnamount")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ProductionPlnamount")))
                 });
             }
             return wantedWorkOrders;

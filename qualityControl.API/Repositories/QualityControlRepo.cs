@@ -31,10 +31,10 @@ namespace qualityControl.API.Repositories
                 list.Add(new QualityControl
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Name = reader.GetString(reader.GetOrdinal("NAME")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
                     SetRef = reader.GetInt32(reader.GetOrdinal("SETREF")),
-                    MinVal = reader.GetDouble(reader.GetOrdinal("MINVAL")),
-                    MaxVal = reader.GetDouble(reader.GetOrdinal("MAXVAL"))
+                    MinVal = reader.IsDBNull(reader.GetOrdinal("MINVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MINVAL"))),
+                    MaxVal = reader.IsDBNull(reader.GetOrdinal("MAXVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MAXVAL")))
                 });
             }
             return list;
@@ -49,7 +49,7 @@ namespace qualityControl.API.Repositories
             using var connection = _factory.CreateRead();
             await connection.OpenAsync();
             using var command = new SqlCommand(sql, connection);
-            command.Parameters.Add(new SqlParameter("@setref", SqlDbType.Int){ Value = setref });
+            command.Parameters.Add(new SqlParameter("@setref", SqlDbType.Int){ Value = (object?)setref ?? DBNull.Value });
 
             var list = new List<QualityControl>();
             using var reader = await command.ExecuteReaderAsync();
@@ -58,10 +58,10 @@ namespace qualityControl.API.Repositories
                 list.Add(new QualityControl
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Name       = reader.GetString(reader.GetOrdinal("NAME")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
                     SetRef     = reader.GetInt32(reader.GetOrdinal("SETREF")),
-                    MinVal     = reader.GetDouble(reader.GetOrdinal("MINVAL")),
-                    MaxVal     = reader.GetDouble(reader.GetOrdinal("MAXVAL"))
+                    MinVal = reader.IsDBNull(reader.GetOrdinal("MINVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MINVAL"))),
+                    MaxVal = reader.IsDBNull(reader.GetOrdinal("MAXVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MAXVAL")))
                 });
             }
             return list;
@@ -81,10 +81,10 @@ namespace qualityControl.API.Repositories
                 return new QualityControl
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Name = reader.GetString(reader.GetOrdinal("NAME")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
                     SetRef = reader.GetInt32(reader.GetOrdinal("SETREF")),
-                    MinVal = reader.GetDouble(reader.GetOrdinal("MINVAL")),
-                    MaxVal = reader.GetDouble(reader.GetOrdinal("MAXVAL"))
+                    MinVal = reader.IsDBNull(reader.GetOrdinal("MINVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MINVAL"))),
+                    MaxVal = reader.IsDBNull(reader.GetOrdinal("MAXVAL")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("MAXVAL")))
                 };
             }
             return null;

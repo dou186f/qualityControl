@@ -14,14 +14,8 @@ namespace qualityControl.MOBILE
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                fonts.AddFont("Ubuntu-Bold.ttf", "Ubold");
-                fonts.AddFont("Ubuntu-BoldItalic.ttf", "Uboldi");
-                fonts.AddFont("Ubuntu-Italic.ttf", "Uital");
-                fonts.AddFont("Ubuntu-Light.ttf", "Ulight");
-                fonts.AddFont("Ubuntu-LightItalic.ttf", "Ulighti");
-                fonts.AddFont("Ubuntu-Medium.ttf", "Umed");
-                fonts.AddFont("Ubuntu-MediumItalic.ttf", "Umedi");
-                fonts.AddFont("Ubuntu-Regular.ttf", "Uregu");
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
             #if ANDROID && DEBUG

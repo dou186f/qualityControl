@@ -24,6 +24,7 @@ namespace qualityControl.API.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery(Name = "q")] string? q, [FromQuery] bool onlyFinished = false, [FromQuery] bool onlyNotFinished = false)
         {
+            if (onlyFinished && onlyNotFinished) return BadRequest("Completion filters cannot both be enabled.");
             var data = await _repo.SearchWorkOrderAsync(q, onlyFinished, onlyNotFinished);
             return Ok(data);
         }

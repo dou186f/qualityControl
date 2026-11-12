@@ -13,6 +13,33 @@ namespace qualityControl.API.Repositories
 
         public async Task<int> UpsertAsync(QualityControlResult dto)
         {
+            var ids = await UpsertBatchAsync(new[] { dto });
+            return ids[0];
+        }
+
+        public async Task<IReadOnlyList<int>> UpsertBatchAsync(IReadOnlyList<QualityControlResult> results)
+        {
+            if (results.Count == 0) throw new ArgumentException("Select at least one result.", nameof(results));
+            using var connection = _factory.CreateWrite();
+            await connection.OpenAsync();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var ids = new List<int>(results.Count);
+                foreach (var dto in results)
+                    ids.Add(await ExecuteUpsertAsync(connection, transaction, dto));
+                await transaction.CommitAsync();
+                return ids;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        private static async Task<int> ExecuteUpsertAsync(SqlConnection connection, SqlTransaction transaction, QualityControlResult dto)
+        {
             const string sql = @"
                             MERGE dbo.QualityControlResult AS target
                             USING (SELECT @wo AS WorkOrderRef, @qc AS QcRef) AS source
@@ -21,17 +48,13 @@ namespace qualityControl.API.Repositories
                                 UPDATE SET
                                     Result = @res,
                                     Name = @name,
-                                    SetRef = @set,
-                                    CreatedAt = SYSUTCDATETIME()
+                                    SetRef = @set
                             WHEN NOT MATCHED THEN
                                 INSERT (WorkOrderRef, QcRef, SetRef, Name, Result, CreatedAt)
                                 VALUES (@wo, @qc, @set, @name, @res, SYSUTCDATETIME())
                             OUTPUT INSERTED.LogicalRef;";
 
-            using var connection = _factory.CreateWrite();
-            await connection.OpenAsync();
-            
-            using var command = new SqlCommand(sql, connection);
+            using var command = new SqlCommand(sql, connection, transaction);
             command.Parameters.AddWithValue("@wo",  dto.WorkOrderRef);
             command.Parameters.AddWithValue("@qc",  dto.QcRef);
             command.Parameters.AddWithValue("@name", (object?)dto.Name ?? DBNull.Value);
@@ -39,6 +62,7 @@ namespace qualityControl.API.Repositories
             command.Parameters.AddWithValue("@res", dto.Result);
 
             var idObj = await command.ExecuteScalarAsync();
+            if (idObj is null || idObj is DBNull) throw new InvalidOperationException("The result could not be saved.");
             return Convert.ToInt32(idObj);
         }
 
@@ -90,7 +114,8 @@ namespace qualityControl.API.Repositories
                 QcRef = reader.GetInt32(reader.GetOrdinal("QcRef")),
                 SetRef = reader.IsDBNull(reader.GetOrdinal("SetRef")) ? null : reader.GetInt32(reader.GetOrdinal("SetRef")),
                 Name = reader.IsDBNull(reader.GetOrdinal("Name")) ? null : reader.GetString(reader.GetOrdinal("Name")),
-                Result = reader.GetBoolean(reader.GetOrdinal("Result"))
+                Result = reader.GetBoolean(reader.GetOrdinal("Result")),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
             };
         }
     }

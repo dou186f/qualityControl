@@ -58,8 +58,15 @@ namespace qualityControl.MOBILE.Services
 
         public async Task SaveAllAsync(int workOrderRef, IEnumerable<QcChecklistItemDto> items)
         {
-            foreach (var x in items.Where(i => i.Result.HasValue))
-                _ = await UpsertResultAsync(workOrderRef, x.QcRef, x.Result!.Value);
+            var results = items.Where(i => i.Result.HasValue).Select(i => new QualityControlResult
+            {
+                WorkOrderRef = workOrderRef,
+                QcRef = i.QcRef,
+                Result = i.Result!.Value
+            }).ToList();
+            if (results.Count == 0) throw new ArgumentException("Select at least one result.", nameof(items));
+            using var response = await _http.PostAsJsonAsync("api/Qc/results", results);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

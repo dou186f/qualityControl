@@ -10,7 +10,7 @@
     <Shell.TitleView>
         <Grid ColumnDefinitions="Auto,*">
             <Label Text="WORK ORDER DETAIL"
-                   FontFamily="Uregu"
+                   FontFamily="OpenSansRegular"
                    FontSize="18"
                    FontAttributes="Bold"
                    VerticalTextAlignment="Center"/>
@@ -69,7 +69,7 @@
                      WidthRequest="360"
                      BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#2C2C2E}" />
 
-            <Button FontFamily="Uregu" 
+            <Button FontFamily="OpenSansRegular"
                     FontSize="16" 
                     Margin="24" 
                     BackgroundColor="DarkGreen" 

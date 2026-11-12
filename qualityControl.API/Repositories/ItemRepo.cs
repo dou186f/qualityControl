@@ -25,9 +25,9 @@ namespace qualityControl.API.Repositories
                 list.Add(new Item
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Code = reader.GetString(reader.GetOrdinal("CODE")),
-                    Name = reader.GetString(reader.GetOrdinal("NAME")),
-                    QccSetRef = reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
+                    Code = reader.IsDBNull(reader.GetOrdinal("CODE")) ? null : reader.GetString(reader.GetOrdinal("CODE")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
+                    QccSetRef = reader.IsDBNull(reader.GetOrdinal("QCCSETREF")) ? null : reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
                 });
             }
             return list;
@@ -47,9 +47,9 @@ namespace qualityControl.API.Repositories
                 return new Item
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Code       = reader.GetString(reader.GetOrdinal("CODE")),
-                    Name       = reader.GetString(reader.GetOrdinal("NAME")),
-                    QccSetRef  = reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
+                    Code = reader.IsDBNull(reader.GetOrdinal("CODE")) ? null : reader.GetString(reader.GetOrdinal("CODE")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
+                    QccSetRef = reader.IsDBNull(reader.GetOrdinal("QCCSETREF")) ? null : reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
                 };
             }
             return null;
@@ -74,9 +74,9 @@ namespace qualityControl.API.Repositories
                 wantedItems.Add(new Item
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Code = reader.GetString(reader.GetOrdinal("CODE")),
-                    Name = reader.GetString(reader.GetOrdinal("NAME")),
-                    QccSetRef = reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
+                    Code = reader.IsDBNull(reader.GetOrdinal("CODE")) ? null : reader.GetString(reader.GetOrdinal("CODE")),
+                    Name = reader.IsDBNull(reader.GetOrdinal("NAME")) ? null : reader.GetString(reader.GetOrdinal("NAME")),
+                    QccSetRef = reader.IsDBNull(reader.GetOrdinal("QCCSETREF")) ? null : reader.GetInt32(reader.GetOrdinal("QCCSETREF"))
                 });
             }
             return wantedItems;

@@ -13,20 +13,52 @@ namespace qualityControl.API.Controllers
 
         [HttpPost("result")]
         public async Task<IActionResult> Upsert([FromBody] QualityControlResult dto,
-        [FromServices] IQualityControlRepo qcRepo,
-        [FromServices] IQualityControlResultRepo resultRepo)
+            [FromServices] IWorkOrderRepo woRepo,
+            [FromServices] IItemRepo itemRepo,
+            [FromServices] IQualityControlRepo qcRepo)
         {
-        if (dto is null) return BadRequest("The body is empty.");
-        if (dto.WorkOrderRef <= 0) return BadRequest("Invalid WorkOrderRef.");
-        if (dto.QcRef <= 0) return BadRequest("Invalid QcRef.");
+            var error = await ValidateAsync(dto, woRepo, itemRepo, qcRepo);
+            if (error is not null) return error;
+            var logicalRef = await _repo.UpsertAsync(dto);
+            return Ok(new { logicalRef });
+        }
 
-        var def = await qcRepo.GetQualityControlByIdAsync(dto.QcRef);
-        if (def is null) return BadRequest("Invalid QcRef.");
-        dto.Name  = def.Name;
-        dto.SetRef = def.SetRef;
+        [HttpPost("results")]
+        public async Task<IActionResult> UpsertBatch([FromBody] List<QualityControlResult>? results,
+            [FromServices] IWorkOrderRepo woRepo,
+            [FromServices] IItemRepo itemRepo,
+            [FromServices] IQualityControlRepo qcRepo)
+        {
+            if (results is null || results.Count == 0) return BadRequest("Select at least one result.");
+            var keys = new HashSet<(int, int)>();
+            foreach (var dto in results)
+            {
+                var error = await ValidateAsync(dto, woRepo, itemRepo, qcRepo);
+                if (error is not null) return error;
+                if (!keys.Add((dto.WorkOrderRef, dto.QcRef)))
+                    return BadRequest("Duplicate work order and test result.");
+            }
+            var logicalRefs = await _repo.UpsertBatchAsync(results);
+            return Ok(new { logicalRefs });
+        }
 
-        var logicalRef = await resultRepo.UpsertAsync(dto);
-        return Ok(new { logicalRef });
+        private async Task<IActionResult?> ValidateAsync(QualityControlResult? dto,
+            IWorkOrderRepo woRepo, IItemRepo itemRepo, IQualityControlRepo qcRepo)
+        {
+            if (dto is null) return BadRequest("The body contains an empty result.");
+            if (dto.WorkOrderRef <= 0) return BadRequest("Invalid WorkOrderRef.");
+            if (dto.QcRef <= 0) return BadRequest("Invalid QcRef.");
+            var wo = await woRepo.GetWorkOrderByIdAsync(dto.WorkOrderRef);
+            if (wo is null) return NotFound("Work order not found.");
+            var item = await itemRepo.GetItemByIdAsync(wo.ItemRef);
+            if (item is null) return NotFound("No related item found.");
+            var def = await qcRepo.GetQualityControlByIdAsync(dto.QcRef);
+            if (def is null) return NotFound("Quality control test not found.");
+            if (item.QccSetRef is null or <= 0 || def.SetRef != item.QccSetRef)
+                return BadRequest("The test does not belong to the work order item's quality control set.");
+            dto.Name = def.Name;
+            dto.SetRef = def.SetRef;
+            return null;
         }
 
         [HttpGet("{logref:int}")]

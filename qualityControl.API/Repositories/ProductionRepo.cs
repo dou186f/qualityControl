@@ -25,8 +25,8 @@ namespace qualityControl.API.Repositories
                 list.Add(new Production
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Plnamount = reader.GetDouble(reader.GetOrdinal("PLNAMOUNT")),
-                    Actamount = reader.GetDouble(reader.GetOrdinal("ACTAMOUNT"))
+                    Plnamount = reader.IsDBNull(reader.GetOrdinal("PLNAMOUNT")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PLNAMOUNT"))),
+                    Actamount = reader.IsDBNull(reader.GetOrdinal("ACTAMOUNT")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ACTAMOUNT")))
                 });
             }
             return list;
@@ -46,8 +46,8 @@ namespace qualityControl.API.Repositories
                 return new Production
                 {
                     LogicalRef = reader.GetInt32(reader.GetOrdinal("LOGICALREF")),
-                    Plnamount = reader.GetFloat(reader.GetOrdinal("PLNAMOUNT")),
-                    Actamount = reader.GetFloat(reader.GetOrdinal("ACTAMOUNT"))
+                    Plnamount = reader.IsDBNull(reader.GetOrdinal("PLNAMOUNT")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PLNAMOUNT"))),
+                    Actamount = reader.IsDBNull(reader.GetOrdinal("ACTAMOUNT")) ? null : Convert.ToDouble(reader.GetValue(reader.GetOrdinal("ACTAMOUNT")))
                 };
             }
             return null;

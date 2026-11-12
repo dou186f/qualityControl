@@ -12,6 +12,10 @@
                 Command="{Binding RefreshCommand}"
                 IsEnabled="{Binding IsNotBusy}" />
 
+        <Label Text="{Binding ErrorMessage}"
+               IsVisible="{Binding HasError}"
+               TextColor="Red" />
+
         <CollectionView ItemsSource="{Binding Items}">
             <CollectionView.EmptyView>
                 <Label Text="No tests were found defined for this work order." 

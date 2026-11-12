@@ -5,6 +5,7 @@ namespace qualityControl.SHARED.Interfaces
     public interface IQualityControlResultRepo
     {
         Task<int> UpsertAsync(QualityControlResult dto);
+        Task<IReadOnlyList<int>> UpsertBatchAsync(IReadOnlyList<QualityControlResult> results);
         Task<Dictionary<int, (bool Result, int LogicalRef)>> GetResultsMapAsync(int workOrderRef);
         Task<QualityControlResult?> GetQCResultAsync(int logref);
     }
